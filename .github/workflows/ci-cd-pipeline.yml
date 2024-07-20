@@ -28,11 +28,8 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Build Flask Docker image
-      run: docker build -t $DOCKER_IMAGE_FLASK:$DOCKER_TAG -f Dockerfile.flask .
-
-    - name: Build Score Docker image
-      run: docker build -t $DOCKER_IMAGE_SCORE:$DOCKER_TAG -f Dockerfile.score .
+    - name: Build Flask & Score Docker image
+      run: docker build -t $DOCKER_IMAGE_FLASK:$DOCKER_TAG -f Dockerfile .
 
     - name: Run Flask Docker container
       run: docker run -d -p 8777:5000 -v $PWD/Scores.txt:/app/Scores.txt --name flask-app $DOCKER_IMAGE_FLASK:$DOCKER_TAG
