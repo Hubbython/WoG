@@ -33,16 +33,6 @@ jobs:
     - name: Run Docker containers
       run: docker-compose up -d
 
-    - name: Wait for containers to be ready
-      run: sleep 60
-
-    - name: Print directory contents inside flask-app container
-      run: |
-        docker-compose exec flask-app ls -R /app
-
-    - name: Print directory contents inside score-app container
-      run: |
-        docker-compose exec score-app ls -R /app
 
     - name: Run tests inside flask-app container
       run: |
