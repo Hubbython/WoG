@@ -33,13 +33,13 @@ jobs:
     - name: Run Docker container
       run: docker run -d -p 8777:5000 -v $PWD/Scores.txt:/app/Scores.txt --name flask-app $DOCKER_IMAGE:$DOCKER_TAG
 
-    - name: Print directory contents before running tests
-      run: ls -R
-
-    - name: Run tests
+    - name: Print directory contents inside container
       run: |
-        set -e
-        python tests/e2e.py
+        docker exec flask-app ls -R /app
+
+    - name: Run tests inside container
+      run: |
+        docker exec flask-app python /app/tests/e2e.py
 
     - name: Stop and remove container
       run: |
