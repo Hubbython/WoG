@@ -1,0 +1,46 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      DOCKER_IMAGE: your-dockerhub-username/flask-app
+      DOCKER_TAG: latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build Docker image
+      run: docker build -t $DOCKER_IMAGE:$DOCKER_TAG .
+
+    - name: Run Docker container
+      run: docker run -d -p 8777:5000 -v $PWD/Scores.txt:/app/Scores.txt --name flask-app $DOCKER_IMAGE:$DOCKER_TAG
+
+    - name: Run tests
+      run: |
+        set -e
+        python e2e.py
+
+    - name: Stop and remove container
+      run: |
+        docker stop flask-app
+        docker rm flask-app
+
+    - name: Push Docker image to DockerHub
+      run: docker push $DOCKER_IMAGE:$DOCKER_TAG
