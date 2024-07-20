@@ -34,6 +34,8 @@ def main_function(app_url):
         return -1  # Exit code -1 indicates failure
 
 
+main_function('8777:5000')
+
 """if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Usage: python e2e.py <application_url>")
