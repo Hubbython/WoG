@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Currency Roulette Game</title>
+</head>
+<body>
+    <h1>Guess the value of {{ amount }} USD in ILS</h1>
+    <form action="{{ url_for('currency_roulette_game_result') }}" method="post">
+        <label for="user_guess">Enter your guess:</label>
+        <input type="number" id="user_guess" name="user_guess" step="0.01" required>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

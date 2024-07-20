@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Result</title>
+</head>
+<body>
+    <h1>{{ 'You won!' if result else 'You lost.' }}</h1>
+    <a href="{{ url_for('index') }}">Play again</a>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Guess Game</title>
+</head>
+<body>
+    <h1>Guess a number between 1 and {{ session['difficulty'] }}</h1>
+    <form action="{{ url_for('guess_game_result') }}" method="post">
+        <label for="user_guess">Enter your guess:</label>
+        <input type="number" id="user_guess" name="user_guess" min="1" max="{{ session['difficulty'] }}" required>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

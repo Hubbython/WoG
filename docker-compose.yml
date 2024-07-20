@@ -1,0 +1,23 @@
+version: '3.9'
+services:
+  flask-app:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./:/app  # Adjust the path as per your project structure
+    environment:
+      - FLASK_APP=app.py  # Set the Flask app entry point
+      - FLASK_ENV=development  # Optional: Set Flask environment (development, production, etc.)
+    command: flask run --host=0.0.0.0 --port=5000  # Command to run Flask app
+
+  score-app:
+    build: .
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./:/app  # Adjust the path as per your project structure
+    environment:
+      - FLASK_APP=MainScores.py  # Set the Flask app entry point for the score service
+      - FLASK_ENV=development  # Optional: Set Flask environment (development, production, etc.)
+    command: flask run --host=0.0.0.0 --port=5001  # Command to run Score app

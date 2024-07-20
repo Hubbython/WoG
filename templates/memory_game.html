@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Memory Game</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Hide the sequence after 0.7 seconds
+            setTimeout(function () {
+                document.getElementById('sequence').style.display = 'none';
+                document.getElementById('user_input').style.display = 'block';
+            }, 700);
+        });
+    </script>
+</head>
+<body>
+    <h1>Remember this sequence:</h1>
+    <div id="sequence">
+        <h2>{{ sequence }}</h2>
+    </div>
+    <div id="user_input" style="display: none;">
+        <form action="{{ url_for('memory_game_result') }}" method="post">
+            <label for="user_sequence">Enter the sequence (only spaces between numbers):</label>
+            <input type="text" id="user_sequence" name="user_sequence" required>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    {% if error_message %}
+        <p style="color: red;">{{ error_message }}</p>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>World of Games</title>
+</head>
+<body>
+    <h1>Welcome to the World of Games</h1>
+    <form action="{{ url_for('welcome_user') }}" method="post">
+        <label for="name">Enter your name:</label>
+        <input type="text" id="name" name="name" required>
+        <button type="submit">Start</button>
+    </form>
+</body>
+</html>
