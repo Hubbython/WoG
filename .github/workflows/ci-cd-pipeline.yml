@@ -27,23 +27,24 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Build Docker images
-      run: docker-compose build
+    - name: Build Docker image
+      run: docker build -t $DOCKER_IMAGE:$DOCKER_TAG .
 
-    - name: Run Docker containers
-      run: docker-compose up -d
+    - name: Run Docker container
+      run: docker run -d -p 8777:5000 -v $PWD/Scores.txt:/app/Scores.txt --name flask-app $DOCKER_IMAGE:$DOCKER_TAG
 
-
-    - name: Run tests inside flask-app container
+    - name: Print directory contents inside container
       run: |
-        docker-compose exec flask-app python /app/tests/e2e.py
+        docker exec flask-app ls -R /app
 
-    - name: Stop and remove containers
-      run: docker-compose down
-
-    - name: Push Docker images to DockerHub
+    - name: Run tests inside container
       run: |
-        docker tag flask-app:latest $DOCKER_IMAGE:$DOCKER_TAG
-        docker push $DOCKER_IMAGE:$DOCKER_TAG
-        docker tag score-app:latest $DOCKER_IMAGE:scores
-        docker push $DOCKER_IMAGE:scores
+        docker exec flask-app python /app/tests/e2e.py
+
+    - name: Stop and remove container
+      run: |
+        docker stop flask-app
+        docker rm flask-app
+
+    - name: Push Docker image to DockerHub
+      run: docker push $DOCKER_IMAGE:$DOCKER_TAG
