@@ -11,7 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DOCKER_IMAGE: arielaman/flask-app
+      DOCKER_IMAGE_FLASK: arielaman/flask-app
+      DOCKER_IMAGE_SCORE: arielaman/score-app
       DOCKER_TAG: latest
 
     steps:
@@ -24,27 +25,40 @@ jobs:
     - name: Login to DockerHub
       uses: docker/login-action@v1
       with:
-        username: ${{ secrets.arielaman }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Build Docker image
-      run: docker build -t $DOCKER_IMAGE:$DOCKER_TAG .
+    - name: Build Flask Docker image
+      run: docker build -t $DOCKER_IMAGE_FLASK:$DOCKER_TAG -f Dockerfile.flask .
 
-    - name: Run Docker container
-      run: docker run -d -p 8777:5000 -v $PWD/Scores.txt:/app/Scores.txt --name flask-app $DOCKER_IMAGE:$DOCKER_TAG
+    - name: Build Score Docker image
+      run: docker build -t $DOCKER_IMAGE_SCORE:$DOCKER_TAG -f Dockerfile.score .
 
-    - name: Print directory contents inside container
+    - name: Run Flask Docker container
+      run: docker run -d -p 8777:5000 -v $PWD/Scores.txt:/app/Scores.txt --name flask-app $DOCKER_IMAGE_FLASK:$DOCKER_TAG
+
+    - name: Run Score Docker container
+      run: docker run -d -p 8778:5001 --name score-app $DOCKER_IMAGE_SCORE:$DOCKER_TAG
+
+    - name: Print directory contents inside Flask container
       run: |
         docker exec flask-app ls -R /app
 
-    - name: Run tests inside container
+    - name: Run tests inside Flask container
       run: |
         docker exec flask-app python /app/tests/e2e.py
 
-    - name: Stop and remove container
+    - name: Wait for a minute
+      run: sleep 60
+
+    - name: Stop and remove containers
       run: |
         docker stop flask-app
+        docker stop score-app
         docker rm flask-app
+        docker rm score-app
 
-    - name: Push Docker image to DockerHub
-      run: docker push $DOCKER_IMAGE:$DOCKER_TAG
+    - name: Push Docker images to DockerHub
+      run: |
+        docker push $DOCKER_IMAGE_FLASK:$DOCKER_TAG
+        docker push $DOCKER_IMAGE_SCORE:$DOCKER_TAG

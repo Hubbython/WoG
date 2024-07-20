@@ -1,16 +1,11 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import sys
 
 
 def test_scores_service(app_url):
     try:
-        # Set up Selenium WebDriver
-        # chrome_options = Options()
-        # chrome_options.add_argument("--headless")  # Run in headless mode (without opening browser window)
         driver = webdriver.Chrome()
 
         # Open the application URL
