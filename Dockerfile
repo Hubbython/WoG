@@ -5,23 +5,6 @@ FROM python:3.9-slim
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# Install necessary packages
-RUN apt-get update && \
-    apt-get install -y \
-    curl \
-    unzip \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Chrome
-RUN curl -LO https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
-    apt-get install -y ./google-chrome-stable_current_amd64.deb
-
-# Install ChromeDriver
-RUN CHROME_DRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE` && \
-    curl -LO https://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VERSION}/chromedriver_linux64.zip && \
-    unzip chromedriver_linux64.zip -d /usr/local/bin/ && \
-    chmod +x /usr/local/bin/chromedriver
-
 # Set the working directory inside the container
 WORKDIR /app
 
