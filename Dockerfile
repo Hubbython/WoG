@@ -4,6 +4,14 @@ FROM python:3.9-slim
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+
+# Install necessary packages
+RUN apt-get update && \
+    apt-get install -y \
+    wget \
+    unzip \
+    && rm -rf /var/lib/apt/lists/* \
+
 # Install Chrome
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
     apt-get install -y ./google-chrome-stable_current_amd64.deb
