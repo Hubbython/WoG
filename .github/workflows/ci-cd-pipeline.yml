@@ -39,7 +39,7 @@ jobs:
 
     - name: Run tests inside container
       run: |
-        docker exec flask-app python /app/tests/e2e.py
+        docker-compose run --rm flask-app python /app/tests/e2e.py
 
     - name: Stop and remove container
       run: |
